@@ -1,10 +1,12 @@
-#ifndef _TIMER_H
-#define _TIMER_H
 /*
 	chrono是一个c++11的时间模板库，精确到纳秒级别。
 	std::chrono::duration 表示一段时间；
-	std::chrono::time_point 表示一个具体时间；			
+	std::chrono::time_point 表示一个具体时间；
 */
+
+#ifndef _TIMER_H
+#define _TIMER_H
+
 #include<chrono>
 using namespace std::chrono;
 

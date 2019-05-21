@@ -61,7 +61,6 @@ public:
 		if(nullptr != _pAdr)
 			free(_pAdr);
 	}
-
 	//初始化内存池为链式结构
 	void initMemory()
 	{
@@ -92,6 +91,7 @@ public:
 			p1->pNext = p2;
 			p1 = p2;
 		}
+		cout << "内存池初始化：" << _nSzie << endl;
 	}
 
 	//申请内存
@@ -219,6 +219,7 @@ public:
 			if (--pBlock->nRef == 0)
 				free(pBlock);
 		}
+		cout << "释放内存" << endl;
 	}
 
 	//增加内存块的引用计数
@@ -260,6 +261,4 @@ private:
 
 	}
 };
-
-
 #endif //_MEMORYMGE_H_

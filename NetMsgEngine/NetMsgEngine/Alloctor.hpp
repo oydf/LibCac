@@ -1,5 +1,5 @@
 /*
-重载new和delete带内存尺寸的方法，兼容原有程序和智能指针
+	重载new和delete带内存尺寸的方法，兼容原有程序和智能指针
 */
 
 #ifndef _ALLOCTOR_H_

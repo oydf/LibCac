@@ -4,7 +4,8 @@
 #ifndef _DATACLIENT_H
 #define _DATACLIENT_H
 #include"Common.hpp"
-
+//客户端心跳检测死亡计时时间
+#define CLIENT_HREAT_DEAD_TIME 5000
 class DataClient
 {
 private:
@@ -18,6 +19,8 @@ private:
 	char _szSendBuf[SEND_BUFF_SZIE];
 	//发送缓冲区的数据尾部位置
 	int _lastSendPos;
+	//心跳死亡计时
+	time_t _dtHeart;
 public:
 	DataClient(SOCKET sockfd = INVALID_SOCKET)
 	{
@@ -26,11 +29,13 @@ public:
 		_lastPos = 0;
 		memset(_szSendBuf, 0, SEND_BUFF_SZIE);
 		_lastSendPos = 0;
+		resetDTHeart();
 	}
 	SOCKET sockfd()
 	{
 		return _sockfd;
 	}
+
 	char* msgBuf()
 	{
 		return _szMsgBuf;
@@ -84,6 +89,23 @@ public:
 			}
 		}
 		return ret;
+	}
+
+	void resetDTHeart()
+	{
+		_dtHeart = 0;
+	}
+
+	//心跳检测
+	bool checkHeart(time_t dt)
+	{
+		_dtHeart += dt;
+		if (_dtHeart >= CLIENT_HREAT_DEAD_TIME)
+		{
+			printf("checkHeart dead:s=%d,time=%d\n", _sockfd, _dtHeart);
+			return true;
+		}
+		return false;
 	}
 };
 #endif // _DATACLIENT_H

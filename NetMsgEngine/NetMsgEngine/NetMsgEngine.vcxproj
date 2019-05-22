@@ -146,8 +146,10 @@
     <ClInclude Include="Common.hpp" />
     <ClInclude Include="DataClient.hpp" />
     <ClInclude Include="DataHeader.hpp" />
+    <ClInclude Include="MainServer.hpp" />
     <ClInclude Include="NetEvent.hpp" />
     <ClInclude Include="ResponseServer.hpp" />
+    <ClInclude Include="SendTask.hpp" />
     <ClInclude Include="Timer.hpp" />
     <ClInclude Include="VirtualTask.hpp" />
   </ItemGroup>

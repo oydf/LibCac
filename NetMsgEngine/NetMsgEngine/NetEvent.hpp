@@ -5,6 +5,8 @@
 #define _NETEVENT_H
 #include"Common.hpp"
 #include"DataClient.hpp"
+
+class ResponseServer;
 class NetEvent
 {
 public:
@@ -13,7 +15,7 @@ public:
 	//客户端离开事件
 	virtual void OnNetLeave(DataClient* pClient) = 0;
 	//客户端消息事件
-	virtual void OnNetMsg(DataClient* pCellServer, DataClient* pClient, DataHeader* header) = 0;
+	virtual void OnNetMsg(ResponseServer* pCellServer, DataClient* pClient, DataHeader* header) = 0;
 	//recv事件
 	virtual void OnNetRecv(DataClient* pClient) = 0;
 };

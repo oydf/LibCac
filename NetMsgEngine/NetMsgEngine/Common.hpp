@@ -2,7 +2,7 @@
 #define _COMMON_H
 
 #ifdef _WIN32
-#define FD_SETSIZE      256
+#define FD_SETSIZE      10000
 #define WIN32_LEAN_AND_MEAN
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include<windows.h>
@@ -17,11 +17,9 @@
 #define INVALID_SOCKET  (SOCKET)(~0)
 #define SOCKET_ERROR            (-1)
 #endif
-//
 #include"DataHeader.hpp"
 #include"Timer.hpp"
-//#include"Task.hpp"
-//
+#include"VirtualTask.hpp"
 #include<stdio.h>
 
 //缓冲区最小单元大小

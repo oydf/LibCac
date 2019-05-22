@@ -12,6 +12,8 @@ enum CMD
 	CMD_LOGOUT,
 	CMD_LOGOUT_RESULT,
 	CMD_NEW_USER_JOIN,
+	CMD_CTOS_HERAT,
+	CMD_STOC_HERAT,
 	CMD_ERROR
 };
 //数据头基类
@@ -84,6 +86,24 @@ struct LogoutR : public DataHeader
 		result = 0;
 	}
 	int result;
+};
+
+struct cTosHeart : public DataHeader
+{
+	cTosHeart()
+	{
+		dataLength = sizeof(cTosHeart);
+		cmd = CMD_CTOS_HERAT;
+	}
+};
+
+struct sTocHeart : public DataHeader
+{
+	sTocHeart()
+	{
+		dataLength = sizeof(sTocHeart);
+		cmd = CMD_STOC_HERAT;
+	}
 };
 
 

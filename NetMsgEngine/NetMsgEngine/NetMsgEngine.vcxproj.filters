@@ -45,6 +45,15 @@
     <ClInclude Include="SendTask.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="WorkEnv.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Condition.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">

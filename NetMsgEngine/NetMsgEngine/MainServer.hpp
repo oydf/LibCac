@@ -7,11 +7,14 @@
 #include"DataClient.hpp"
 #include"ResponseServer.hpp"
 #include"NetEvent.hpp"
+#include"WorkEnv.hpp"
 #include<thread>
 #include<mutex>
 #include<atomic>
+#include<iostream>
+
 /*
-	继承NetEvent，实现其事件接口，在主线程中只关注NetUserJion事件
+	继承NetEvent，实现其事件接口，在主线程中只关注客户端连入事件
 */
 class MainServer : public NetEvent
 {
@@ -30,13 +33,10 @@ protected:
 	//客户端计数
 	std::atomic_int _clientCount;
 public:
-	MainServer()
-	{
-		_sock = INVALID_SOCKET;
-		_recvCount = 0;
-		_msgCount = 0;
-		_clientCount = 0;
-	}
+	//初始化
+	MainServer() :_sock(INVALID_SOCKET), _recvCount(0), _msgCount(0), _clientCount(0){}
+
+	//虚析构
 	virtual ~MainServer()
 	{
 		Close();
@@ -45,14 +45,10 @@ public:
 	//1.初始化Socket
 	SOCKET InitSocket()
 	{
-#ifdef _WIN32
-		//启动Windows socket 2.x环境
-		WORD ver = MAKEWORD(2, 2);
-		WSADATA dat;
-		WSAStartup(ver, &dat);
-#endif
+		WorkEnv::Init();
 		if (INVALID_SOCKET != _sock)
 		{
+			//日志记录点
 			printf("<socket=%d>   关闭旧连接...\n", (int)_sock);
 			Close();
 		}
@@ -61,13 +57,14 @@ public:
 		{
 			printf("错误，建立socket失败...\n");
 		}
-		else {
+		else 
+		{
 			printf("建立   socket=<%d>   成功...\n", (int)_sock);
 		}
 		return _sock;
 	}
 
-	//2.绑定IP和端口号
+	//2.绑定IP和端口号,字节序转换
 	int Bind(const char* ip, unsigned short port)
 	{
 		sockaddr_in _sin = {};
@@ -113,7 +110,8 @@ public:
 		{
 			printf("socket=<%d>   错误,监听网络端口失败...\n", _sock);
 		}
-		else {
+		else
+		{
 			printf("socket=<%d>   监听网络端口成功...\n", _sock);
 		}
 		return ret;
@@ -136,22 +134,23 @@ public:
 		}
 		else
 		{
-			addClientToResponseServer(new DataClient(cSock));
+			std::cout << cSock << "   +++" << std::endl;
+			//addClientToResponseServer(new DataClient(cSock));
 			//获取IP地址 inet_ntoa(clientAddr.sin_addr)
 		}
 		return cSock;
 	}
 
-	//将新客户端分配给客户数量最少的cellServer
+	//将新客户端分配给客户数量最少的响应线程
 	void addClientToResponseServer(DataClient* pClient)
 	{
 		//查找客户数量最少的消息处理对象
 		auto pMinServer = _rpsServers[0];
-		for (auto pCellServer : _rpsServers)
+		for (auto pRpsServer : _rpsServers)
 		{
-			if (pMinServer->getClientCount() > pCellServer->getClientCount())
+			if (pMinServer->getClientCount() > pRpsServer->getClientCount())
 			{
-				pMinServer = pCellServer;
+				pMinServer = pRpsServer;
 			}
 		}
 		pMinServer->addClient(pClient);
@@ -159,11 +158,11 @@ public:
 	}
 
 	//启动n个子线程，处理网络事件
-	void Start(int nCellServer)
+	void Start(int nRpsServer)
 	{
-		for (int n = 0; n < nCellServer; n++)
+		for (int n = 0; n < nRpsServer; n++)
 		{
-			auto ser = new ResponseServer(_sock);
+			auto ser = new ResponseServer(n+1);
 			_rpsServers.push_back(ser);
 			//主线程定义的网络事件注册到子线程中
 			ser->setEvent(this);

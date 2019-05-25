@@ -144,14 +144,17 @@
   <ItemGroup>
     <ClInclude Include="Alloctor.hpp" />
     <ClInclude Include="Common.hpp" />
+    <ClInclude Include="Condition.hpp" />
     <ClInclude Include="DataClient.hpp" />
     <ClInclude Include="DataHeader.hpp" />
     <ClInclude Include="MainServer.hpp" />
     <ClInclude Include="NetEvent.hpp" />
     <ClInclude Include="ResponseServer.hpp" />
     <ClInclude Include="SendTask.hpp" />
+    <ClInclude Include="Thread.hpp" />
     <ClInclude Include="Timer.hpp" />
     <ClInclude Include="VirtualTask.hpp" />
+    <ClInclude Include="WorkEnv.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MemoryMge.hpp" />

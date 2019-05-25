@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Alloctor.hpp" />
+    <ClInclude Include="Buffer.hpp" />
     <ClInclude Include="Common.hpp" />
     <ClInclude Include="Condition.hpp" />
     <ClInclude Include="DataClient.hpp" />

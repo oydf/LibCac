@@ -3,7 +3,7 @@
 */
 #ifndef _VIRTUALTASK_H_
 #define _VIRTUALTASK_H_
-#include<thread>
+#include"Thread.hpp"
 #include<mutex>
 #include<vector>
 //任务基类
@@ -25,6 +25,8 @@ private:
 	std::vector<VirtualTask* > _tasksBuff;
 	//加锁
 	std::mutex _mutex;
+
+	mThread _thread;
 public:
 	//添加任务
 	void addTask(VirtualTask* task)
@@ -38,6 +40,10 @@ public:
 		//线程
 		std::thread t(std::mem_fn(&TaskServer::Run), this);
 		t.detach();
+	}
+	void close()
+	{
+		_thread.Close();
 	}
 protected:
 	//从缓冲区取出任务，循环处理

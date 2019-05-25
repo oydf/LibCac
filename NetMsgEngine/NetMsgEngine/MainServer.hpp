@@ -8,6 +8,7 @@
 #include"ResponseServer.hpp"
 #include"NetEvent.hpp"
 #include"WorkEnv.hpp"
+#include"Thread.hpp"
 #include<thread>
 #include<mutex>
 #include<atomic>
@@ -25,6 +26,8 @@ private:
 	std::vector<ResponseServer*> _rpsServers;
 	//每秒消息计时
 	Timer _tTime;
+	//线程管理
+	mThread _thread;
 protected:
 	//recv计数
 	std::atomic_int _recvCount;
@@ -169,6 +172,10 @@ public:
 			//启动消息处理线程
 			ser->Start();
 		}
+		_thread.Start(nullptr,
+			[this](mThread* pThread){
+			EventLoop(pThread);
+		});
 	}
 
 	//关闭Socket
@@ -190,24 +197,22 @@ public:
 	}
 
 	//处理网络消息；将该事件循环设置到用户代码中，功能可扩展性更强
-	bool Run()
+	void EventLoop(mThread* pThread)
 	{
-		if(isRun())
+		while (pThread->isRun())
 		{
-			//timemsg();
+			timemsg();
 			//伯克利套接字 BSD socket
 			fd_set fdRead;
 			FD_ZERO(&fdRead);
 			//将描述符（socket）加入集合，只需要监控这一个socket
 			FD_SET(_sock, &fdRead);
-
 			timeval t = { 0,10 };
 			int ret = select(_sock + 1, &fdRead, 0, 0, &t); //
 			if (ret < 0)
 			{
 				printf("Accept Select任务结束。\n");
-				Close();
-				return false;
+				pThread->Exit();
 			}
 
 			//判断描述符（socket）是否在集合中
@@ -215,11 +220,8 @@ public:
 			{
 				FD_CLR(_sock, &fdRead);
 				Accept();
-				return true;
 			}
-			return true;
 		}
-		return false;
 	}
 
 	//是否工作中
@@ -227,7 +229,6 @@ public:
 	{
 		return _sock != INVALID_SOCKET;
 	}
-
 	//计算并输出每秒收到的网络消息
 	void timemsg()
 	{
@@ -241,31 +242,30 @@ public:
 		} 
 	}
 
-	//只会被一个线程触发 安全
 	virtual void OnNetJoin(DataClient* pClient)
 	{
 		_clientCount++;
-		//printf("client<%d>  join\n", pClient->sockfd());
+		//CELLLog::Info("client<%d> join\n", pClient->sockfd());
 	}
 
-	//cellServer 4 多个线程触发 不安全，如果只开启1个cellServer就是安全的
+	//cellServer 4 多个线程触发 不安全
+	//如果只开启1个cellServer就是安全的
 	virtual void OnNetLeave(DataClient* pClient)
 	{
 		_clientCount--;
-		//printf("client<%d>   leave\n", pClient->sockfd());
+		//CELLLog::Info("client<%d> leave\n", pClient->sockfd());
 	}
-
-	//cellServer 4 多个线程触发 不安全，如果只开启1个cellServer就是安全的
-	virtual void OnNetMsg(ResponseServer* pCellServer, DataClient* pClient, DataHeader* header)
+	//cellServer 4 多个线程触发 不安全
+	//如果只开启1个cellServer就是安全的
+	virtual void OnNetMsg(ResponseServer* pServer, DataClient* pClient, DataHeader* header)
 	{
 		_msgCount++;
-		//printf("client<%d>   msg\n", pClient->sockfd());
 	}
 
 	virtual void OnNetRecv(DataClient* pClient)
 	{
 		_recvCount++;
-		//printf("client<%d>  recv\n", pClient->sockfd());
+		//CELLLog::Info("client<%d> leave\n", pClient->sockfd());
 	}
 };
 #endif // _MAINSERVER_H

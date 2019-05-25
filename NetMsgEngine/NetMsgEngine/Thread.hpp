@@ -5,41 +5,45 @@
 #define _THREAD_H
 #include"Condition.hpp"
 #include<thread>
+#include<functional>
 
-class Thread
+//向启动线程注册回调函数
+class mThread;
+typedef std::function<void(mThread*)> _ThreadCall;
+
+class mThread
 {
 private:
-	typedef std::function<void(Thread*)> EventCall;
-	EventCall _onCreate;
-	EventCall _onRun;
-	EventCall _onDestory;
+	//单次执行函数
+	_ThreadCall _create;
+	//eventloop函数
+	_ThreadCall _loop;
+	//销毁函数
+	_ThreadCall _destory;
 	//不同线程中改变数据时需要加锁
 	std::mutex _mutex;
 	//控制线程的终止、退出
-	CELLSemaphore _sem;
+	Condition _sem;
 	//线程是否启动运行中
-	bool	_isRun = false;	
+	bool _isRun;	
 public:
+	mThread() :_isRun(false) {}
+
 	//启动线程
-	void Start(
-		EventCall onCreate = nullptr,
-		EventCall onRun = nullptr,
-		EventCall onDestory = nullptr)
+	void Start(_ThreadCall onCreate = nullptr, _ThreadCall onRun = nullptr,_ThreadCall onDestory = nullptr)
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
 		if (!_isRun)
 		{
 			_isRun = true;
-
-			if (onCreate)
-				_onCreate = onCreate;
-			if (onRun)
-				_onRun = onRun;
-			if (onDestory)
-				_onDestory = onDestory;
-
+			if (_create)
+				_create = onCreate;
+			if (_loop)
+				_loop = onRun;
+			if (_destory)
+				_destory = onDestory;
 			//线程
-			std::thread t(std::mem_fn(&Thread::OnWork), this);
+			std::thread t(std::mem_fn(&mThread::OnWork), this);
 			t.detach();
 		}
 	}
@@ -75,17 +79,13 @@ protected:
 	//线程的运行时的工作函数
 	void OnWork()
 	{
-		if (_onCreate)
-			_onCreate(this);
-		if (_onRun)
-			_onRun(this);
-		if (_onDestory)
-			_onDestory(this);
-
+		if (_create)
+			_create(this);
+		if (_loop)
+			_loop(this);
+		if (_destory)
+			_destory(this);
 		_sem.wakeup();
 	}
-
 };
-
-
 #endif // !_THREAD_H

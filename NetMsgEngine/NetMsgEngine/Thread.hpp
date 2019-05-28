@@ -5,14 +5,13 @@
 #define _THREAD_H
 #include"Condition.hpp"
 #include<thread>
-#include<functional>
 
 //向启动线程注册回调函数
-class mThread;
-typedef std::function<void(mThread*)> _ThreadCall;
 
 class mThread
 {
+private:
+	typedef std::function<void(mThread*)> _ThreadCall;
 private:
 	//单次执行函数
 	_ThreadCall _create;
@@ -25,22 +24,24 @@ private:
 	//控制线程的终止、退出
 	Condition _sem;
 	//线程是否启动运行中
-	bool _isRun;	
+	bool _isRun = false;	
 public:
-	mThread() :_isRun(false) {}
+	//mThread() :_isRun(false) {}
 
 	//启动线程
-	void Start(_ThreadCall onCreate = nullptr, _ThreadCall onRun = nullptr,_ThreadCall onDestory = nullptr)
+	void Start(_ThreadCall onCreate = nullptr, 
+		_ThreadCall onRun = nullptr,
+		_ThreadCall onDestory = nullptr)
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
 		if (!_isRun)
 		{
 			_isRun = true;
-			if (_create)
+			if (onCreate)
 				_create = onCreate;
-			if (_loop)
+			if (onRun)
 				_loop = onRun;
-			if (_destory)
+			if (onDestory)
 				_destory = onDestory;
 			//线程
 			std::thread t(std::mem_fn(&mThread::OnWork), this);

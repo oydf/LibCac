@@ -25,21 +25,22 @@ private:
 	std::vector<VirtualTask* > _tasksBuff;
 	//加锁
 	std::mutex _mutex;
-
 	mThread _thread;
 public:
+	int serverid = -1;
 	//添加任务
 	void addTask(VirtualTask* task)
 	{
 		std::lock_guard<std::mutex> tkl(_mutex);
 		_tasksBuff.push_back(task);
 	}
+
 	//启动工作线程
 	void Start()
 	{
-		//线程
-		std::thread t(std::mem_fn(&TaskServer::Run), this);
-		t.detach();
+		_thread.Start(nullptr, [this](mThread* pThread) {
+			Run(pThread);
+		});
 	}
 	void close()
 	{
@@ -47,9 +48,9 @@ public:
 	}
 protected:
 	//从缓冲区取出任务，循环处理
-	void Run()
+	void Run(mThread* pThread)
 	{
-		while (true)
+		while (pThread->isRun())
 		{
 			//从缓冲区取出数据
 			if (!_tasksBuff.empty())
@@ -76,6 +77,10 @@ protected:
 			}
 			//清空任务
 			_tasks.clear();
+		}
+		for (auto pTask : _tasksBuff)
+		{
+			pTask->myTask();
 		}
 	}
 };

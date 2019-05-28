@@ -18,7 +18,6 @@ private:
 		WSADATA dat;
 		WSAStartup(ver, &dat);
 #endif
-
 #ifndef _WIN32
 		signal(SIGPIPE, SIG_IGN);
 #endif

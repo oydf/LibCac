@@ -148,6 +148,8 @@
     <ClInclude Include="Condition.hpp" />
     <ClInclude Include="DataClient.hpp" />
     <ClInclude Include="DataHeader.hpp" />
+    <ClInclude Include="lambdaTask.hpp" />
+    <ClInclude Include="Logger.hpp" />
     <ClInclude Include="MainServer.hpp" />
     <ClInclude Include="NetEvent.hpp" />
     <ClInclude Include="ResponseServer.hpp" />

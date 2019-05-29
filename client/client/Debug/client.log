@@ -1,0 +1,22 @@
+﻿  client.cpp
+c:\users\x1c\desktop\netlib\include\logger.hpp(89): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: 参见“fopen”的声明
+c:\users\x1c\desktop\netlib\include\logger.hpp(110): warning C4996: 'gmtime': This function or variable may be unsafe. Consider using gmtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\time.h(495): note: 参见“gmtime”的声明
+c:\users\x1c\desktop\netlib\include\logger.hpp(111): warning C4477: “fprintf”: 格式字符串“%ld”需要类型“long”的参数，但可变参数 2 拥有了类型“__int64”
+  c:\users\x1c\desktop\netlib\include\logger.hpp(111): note: 请考虑在格式字符串中使用“%lld”
+  c:\users\x1c\desktop\netlib\include\logger.hpp(111): note: 请考虑在格式字符串中使用“%I64d”
+c:\users\x1c\desktop\netlib\client\client.cpp(52): warning C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1270): note: 参见“scanf”的声明
+c:\users\x1c\desktop\netlib\client\client.cpp(118): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 参见“strcpy”的声明
+c:\users\x1c\desktop\netlib\client\client.cpp(119): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 参见“strcpy”的声明
+c:\users\x1c\desktop\netlib\include\logger.hpp(143): warning C4996: 'gmtime': This function or variable may be unsafe. Consider using gmtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\time.h(495): note: 参见“gmtime”的声明
+  c:\users\x1c\desktop\netlib\include\logger.hpp(92): note: 参见对正在编译的函数 模板 实例化“void Logger::Info<const char*,const char*>(const char *,const char *,const char *)”的引用
+c:\users\x1c\desktop\netlib\include\logger.hpp(134): warning C4477: “fprintf”: 格式字符串“%ld”需要类型“long”的参数，但可变参数 2 拥有了类型“__int64”
+  c:\users\x1c\desktop\netlib\include\logger.hpp(134): note: 请考虑在格式字符串中使用“%lld”
+  c:\users\x1c\desktop\netlib\include\logger.hpp(134): note: 请考虑在格式字符串中使用“%I64d”
+  client.vcxproj -> C:\Users\x1c\Desktop\NetLib\server\server\Debug\client.exe
+  client.vcxproj -> C:\Users\x1c\Desktop\NetLib\server\server\Debug\client.pdb (Full PDB)
